@@ -9,17 +9,25 @@ flow_acc_md8_iteration(
   quantiles = c(0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95),
   error = 0.16,
   n_iter = c(2, 5, 10, 50, 100, 500),
+  method = c("md8", "d8"),
+  dispersion_statistics = TRUE,
   working_directory = getwd()
 )
 }
 \arguments{
 \item{input}{Character. Path to the digital elevation model file (with extension).}
 
-\item{quantiles}{Numeric vector. Quantiles to compute, between 0 and 1.}
+\item{quantiles}{Numeric vector. Quantiles to compute, between 0 and 1. Use NULL to skip quantiles.}
 
 \item{error}{Numeric. RMSE of the LiDAR elevation error, in meters.}
 
 \item{n_iter}{Integer vector. Iteration numbers at which a result raster is written.}
+
+\item{method}{Character. Flow accumulation algorithm: "md8" (whitebox::wbt_fd8_flow_accumulation)
+or "d8" (whitebox::wbt_d8_flow_accumulation).}
+
+\item{dispersion_statistics}{Logical. If TRUE, compute the standard deviation (sd) and
+coefficient of variation (cv).}
 
 \item{working_directory}{Character. Working directory where temporary files are written.}
 }
