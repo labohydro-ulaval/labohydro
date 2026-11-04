@@ -6,6 +6,7 @@
 #' @param output_directory Character. Working directory where temporary files are written.
 #' @param snap_distance Numeric. Maximum distance to snap pour points to the flow accumulation, in map units.
 #' @param remove_temp Logical. If `TRUE`, temporary files (facc_temp, fdir_temp, pour_point_temp, snap_pour_point_temp, watershed_raster_temp, watershed_polygon_temp) are deleted.
+#' @param esri_pntr Logical. If `TRUE` (default), `fdir` uses the ESRI D8 pointer scheme (as produced by `flow_dir_acc()`).
 #'
 #' @returns
 #' same watershed number as pour point
@@ -18,7 +19,8 @@ watershed <- function(facc,
                       pour_point,
                       output_directory = getwd(),
                       snap_distance = 10,
-                      remove_temp = TRUE) {
+                      remove_temp = TRUE,
+                      esri_pntr = TRUE) {
 
   # ------------------------------------------------------------
   # 1. Prepare working directory
@@ -60,7 +62,7 @@ watershed <- function(facc,
     d8_pntr = fdir_temp,
     pour_pts = snap_pour_point_temp,
     output = watershed_raster_temp,
-    esri_pntr = TRUE
+    esri_pntr = esri_pntr
   )
 
   whitebox::wbt_raster_to_vector_polygons(

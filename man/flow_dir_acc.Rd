@@ -8,7 +8,8 @@ flow_dir_acc(
   input,
   output = "flow_acc.tif",
   working_directory = getwd(),
-  remove_flowdir = TRUE
+  remove_flowdir = TRUE,
+  esri_pntr = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ flow_dir_acc(
 \item{working_directory}{Character. Working directory where temporary files are written.}
 
 \item{remove_flowdir}{Logical. If \code{TRUE}, the flow direction file (flow_dir) is deleted.}
+
+\item{esri_pntr}{Logical. If \code{TRUE} (default), the D8 flow direction uses the ESRI pointer scheme.}
 }
 \value{
 flow dir and acc

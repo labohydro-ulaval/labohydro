@@ -10,7 +10,8 @@ watershed(
   pour_point,
   output_directory = getwd(),
   snap_distance = 10,
-  remove_temp = TRUE
+  remove_temp = TRUE,
+  esri_pntr = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ watershed(
 \item{snap_distance}{Numeric. Maximum distance to snap pour points to the flow accumulation, in map units.}
 
 \item{remove_temp}{Logical. If \code{TRUE}, temporary files (facc_temp, fdir_temp, pour_point_temp, snap_pour_point_temp, watershed_raster_temp, watershed_polygon_temp) are deleted.}
+
+\item{esri_pntr}{Logical. If \code{TRUE} (default), \code{fdir} uses the ESRI D8 pointer scheme (as produced by \code{flow_dir_acc()}).}
 }
 \value{
 same watershed number as pour point
