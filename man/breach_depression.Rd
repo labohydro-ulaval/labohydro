@@ -8,7 +8,9 @@ breach_depression(
   input,
   output,
   working_directory = getwd(),
-  remove_temp = TRUE
+  remove_temp = TRUE,
+  flat_increment = 1e-04,
+  dist = 50
 )
 }
 \arguments{
@@ -19,6 +21,13 @@ breach_depression(
 \item{working_directory}{Character. Working directory where temporary files are written.}
 
 \item{remove_temp}{Logical. If \code{TRUE}, temporary files (fill_scp, breach_scp, breach_lc) are deleted.}
+
+\item{flat_increment}{Numeric. Elevation increment applied to flat areas along breach
+paths, used by both \code{wbt_breach_depressions_least_cost()} and \code{wbt_breach_depressions()}.
+Default \code{0.0001}.}
+
+\item{dist}{Numeric. Maximum search distance for breach paths, in cells, used by
+\code{wbt_breach_depressions_least_cost()}. Default \code{50}.}
 }
 \value{
 a dem with depressions breached

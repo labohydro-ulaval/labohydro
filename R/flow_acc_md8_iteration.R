@@ -9,6 +9,12 @@
 #' @param dispersion_statistics Logical. If TRUE, compute the standard deviation (sd) and
 #' coefficient of variation (cv).
 #' @param working_directory Character. Working directory where temporary files are written.
+#' @param w Numeric or matrix. Focal window used by `random_raster()` to smooth the random
+#'   error field (see `terra::focal()`). Default `3`.
+#' @param flat_increment Numeric. Elevation increment applied to flat areas along breach
+#'   paths, passed to `breach_depression()`. Default `0.0001`.
+#' @param dist Numeric. Maximum search distance for breach paths, in cells, passed to
+#'   `breach_depression()`. Default `50`.
 #'
 #' @returns
 #' a spatraster with multiple layers of flow accumulation distribution
@@ -22,7 +28,10 @@ flow_acc_md8_iteration <- function(input,
                                    n_iter = c(2, 5, 10, 50, 100, 500),
                                    method = c("md8", "d8"),
                                    dispersion_statistics = TRUE,
-                                   working_directory = getwd()){
+                                   working_directory = getwd(),
+                                   w = 3,
+                                   flat_increment = 0.0001,
+                                   dist = 50){
 
   method <- match.arg(method)
 
@@ -40,14 +49,17 @@ flow_acc_md8_iteration <- function(input,
 
     error_raster <- random_raster(raster = dem,
                                error = error,
-                               seed = i)
+                               seed = i,
+                               w = w)
 
     dem_error <- dem + error_raster
 
     terra::writeRaster(dem_error, dem_error_temp)
 
     breach_depression(input = dem_error_temp,
-                      output = dem_breached_temp)
+                      output = dem_breached_temp,
+                      flat_increment = flat_increment,
+                      dist = dist)
 
     if(method == "md8"){
 

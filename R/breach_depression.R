@@ -4,6 +4,11 @@
 #' @param output Character. Path to the breached digital elevation model file (with extension).
 #' @param working_directory Character. Working directory where temporary files are written.
 #' @param remove_temp Logical. If `TRUE`, temporary files (fill_scp, breach_scp, breach_lc) are deleted.
+#' @param flat_increment Numeric. Elevation increment applied to flat areas along breach
+#'   paths, used by both `wbt_breach_depressions_least_cost()` and `wbt_breach_depressions()`.
+#'   Default `0.0001`.
+#' @param dist Numeric. Maximum search distance for breach paths, in cells, used by
+#'   `wbt_breach_depressions_least_cost()`. Default `50`.
 #'
 #' @returns
 #' a dem with depressions breached
@@ -14,7 +19,9 @@
 breach_depression <- function(input,
                               output,
                               working_directory = getwd(),
-                              remove_temp = TRUE) {
+                              remove_temp = TRUE,
+                              flat_increment = 0.0001,
+                              dist = 50) {
 
   # ------------------------------------------------------------
   # 1. Save current working directory and switch to target folder
@@ -64,8 +71,8 @@ breach_depression <- function(input,
   whitebox::wbt_breach_depressions_least_cost(
     dem = breach_scp_file,
     output = breach_lc_file,
-    flat_increment = 0.0001,
-    dist = 50,
+    flat_increment = flat_increment,
+    dist = dist,
     fill = FALSE
   )
 
@@ -77,7 +84,7 @@ breach_depression <- function(input,
   whitebox::wbt_breach_depressions(
     dem = breach_lc_file,
     output = output,
-    flat_increment = 0.0001
+    flat_increment = flat_increment
   )
 
   # ------------------------------------------------------------

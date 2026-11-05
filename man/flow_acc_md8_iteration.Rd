@@ -11,7 +11,10 @@ flow_acc_md8_iteration(
   n_iter = c(2, 5, 10, 50, 100, 500),
   method = c("md8", "d8"),
   dispersion_statistics = TRUE,
-  working_directory = getwd()
+  working_directory = getwd(),
+  w = 3,
+  flat_increment = 1e-04,
+  dist = 50
 )
 }
 \arguments{
@@ -30,6 +33,15 @@ or "d8" (whitebox::wbt_d8_flow_accumulation).}
 coefficient of variation (cv).}
 
 \item{working_directory}{Character. Working directory where temporary files are written.}
+
+\item{w}{Numeric or matrix. Focal window used by \code{random_raster()} to smooth the random
+error field (see \code{terra::focal()}). Default \code{3}.}
+
+\item{flat_increment}{Numeric. Elevation increment applied to flat areas along breach
+paths, passed to \code{breach_depression()}. Default \code{0.0001}.}
+
+\item{dist}{Numeric. Maximum search distance for breach paths, in cells, passed to
+\code{breach_depression()}. Default \code{50}.}
 }
 \value{
 a spatraster with multiple layers of flow accumulation distribution
