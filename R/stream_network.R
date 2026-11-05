@@ -6,6 +6,7 @@
 #' @param thresholds Numeric vector. Flow accumulation thresholds used to classify streams.
 #' @param working_directory Character. Working directory where temporary files are written.
 #' @param remove_temp Logical. If `TRUE`, temporary files (flow_acc_reclass_temp, flow_acc_reclass_nodata_temp) are deleted.
+#' @param esri_pntr Logical. If `TRUE` (default), `fdir` uses the ESRI D8 pointer scheme (as produced by `flow_dir_acc()`).
 #'
 #' @returns
 #' stream network
@@ -18,7 +19,8 @@ stream_network <- function(facc,
                            output,
                            thresholds,                   # e.g., c(5000, 10000, 20000)
                            working_directory = getwd(),
-                           remove_temp = TRUE) {
+                           remove_temp = TRUE,
+                           esri_pntr = TRUE) {
 
   # ------------------------------------------------------------
   # 1. Save and switch working directory
@@ -93,7 +95,8 @@ stream_network <- function(facc,
   whitebox::wbt_raster_streams_to_vector(
     streams = reclass_nodata,
     d8_pntr = fdir,
-    output  = output
+    output  = output,
+    esri_pntr = esri_pntr
   )
 
   # ------------------------------------------------------------

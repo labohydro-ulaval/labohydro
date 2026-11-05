@@ -10,7 +10,8 @@ stream_network(
   output,
   thresholds,
   working_directory = getwd(),
-  remove_temp = TRUE
+  remove_temp = TRUE,
+  esri_pntr = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ stream_network(
 \item{working_directory}{Character. Working directory where temporary files are written.}
 
 \item{remove_temp}{Logical. If \code{TRUE}, temporary files (flow_acc_reclass_temp, flow_acc_reclass_nodata_temp) are deleted.}
+
+\item{esri_pntr}{Logical. If \code{TRUE} (default), \code{fdir} uses the ESRI D8 pointer scheme (as produced by \code{flow_dir_acc()}).}
 }
 \value{
 stream network

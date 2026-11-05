@@ -4,6 +4,7 @@
 #' @param output Character. Path to the flow accumulation file (with extension).
 #' @param working_directory Character. Working directory where temporary files are written.
 #' @param remove_flowdir Logical. If `TRUE`, the flow direction file (flow_dir) is deleted.
+#' @param esri_pntr Logical. If `TRUE` (default), the D8 flow direction uses the ESRI pointer scheme.
 #'
 #' @returns
 #' flow dir and acc
@@ -14,7 +15,8 @@
 flow_dir_acc <- function(input,
                          output = "flow_acc.tif",
                          working_directory = getwd(),
-                         remove_flowdir = TRUE) {
+                         remove_flowdir = TRUE,
+                         esri_pntr = TRUE) {
 
   # ------------------------------------------------------------
   # 1. Save and switch working directory
@@ -38,12 +40,12 @@ flow_dir_acc <- function(input,
   #    WhiteboxTools creates a pointer raster indicating
   #    the direction water flows out of each pixel.
   #
-  #    `esri_pntr = TRUE` ensures ESRI-style pointer encoding.
+  #    `esri_pntr = TRUE` (default) ensures ESRI-style pointer encoding.
   # ------------------------------------------------------------
   whitebox::wbt_d8_pointer(
     dem   = input,
     output = flowdir_file,
-    esri_pntr = TRUE
+    esri_pntr = esri_pntr
   )
 
   # ------------------------------------------------------------
@@ -56,7 +58,7 @@ flow_dir_acc <- function(input,
     input = flowdir_file,
     output = output,
     pntr = TRUE,
-    esri_pntr = TRUE
+    esri_pntr = esri_pntr
   )
 
   # ------------------------------------------------------------
