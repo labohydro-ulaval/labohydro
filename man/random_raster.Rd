@@ -4,7 +4,7 @@
 \alias{random_raster}
 \title{random_raster}
 \usage{
-random_raster(raster, error, seed = 1, w = 3)
+random_raster(raster, error, seed = 1, radius = 1)
 }
 \arguments{
 \item{raster}{A \code{SpatRaster}. Reference raster.}
@@ -13,10 +13,9 @@ random_raster(raster, error, seed = 1, w = 3)
 
 \item{seed}{Integer. Random seed for reproducibility.}
 
-\item{w}{Numeric or matrix. Focal window passed to \code{terra::focal()}: an odd
-integer (window size, e.g. \code{3} for a 3x3 window), a vector of two odd
-integers (rows, columns), or a weights matrix. Larger windows produce a
-smoother (more spatially autocorrelated) error field. Default \code{3}.}
+\item{radius}{Integer. Radius, in cells, of the circular mean focal statistic that
+smooths the random field, from \code{circle_focal_window()}. Larger windows produce a
+smoother (more spatially autocorrelated) error field. Default \code{1}.}
 }
 \value{
 a random raster

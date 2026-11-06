@@ -7,12 +7,13 @@
 annulus_focal_window(inner_radius, outer_radius)
 }
 \arguments{
-\item{inner_radius}{Numeric. Inner radius of the annulus, in number of cells.}
+\item{inner_radius}{Integer. Inner radius of the annulus, in cells. Must be 0 or more.}
 
-\item{outer_radius}{Numeric. Outer radius of the annulus, in number of cells.}
+\item{outer_radius}{Integer. Outer radius of the annulus, in cells. Must be 1 or more,
+and at least \code{inner_radius}.}
 }
 \value{
-a matrix of annulus focal window
+a matrix of annulus focal window, with 1 inside the annulus and NA outside
 }
 \description{
 annulus_focal_window

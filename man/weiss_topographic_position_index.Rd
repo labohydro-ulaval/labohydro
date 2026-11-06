@@ -9,9 +9,9 @@ weiss_topographic_position_index(dem, inner_radius, outer_radius, round = TRUE)
 \arguments{
 \item{dem}{A \code{SpatRaster}. Digital elevation model.}
 
-\item{inner_radius}{Numeric. Inner radius of the annulus, in map units.}
+\item{inner_radius}{Integer. Inner radius of the annulus, in cells.}
 
-\item{outer_radius}{Numeric. Outer radius of the annulus, in map units.}
+\item{outer_radius}{Integer. Outer radius of the annulus, in cells.}
 
 \item{round}{Logical. If \code{TRUE}, the index is rounded to the nearest integer.}
 }

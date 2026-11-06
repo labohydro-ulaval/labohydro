@@ -12,9 +12,10 @@ flow_acc_md8_iteration(
   method = c("md8", "d8"),
   dispersion_statistics = TRUE,
   working_directory = getwd(),
-  w = 3,
+  error_radius = 1,
   flat_increment = 1e-04,
-  dist = 50
+  dist = 50,
+  focal_radius = NULL
 )
 }
 \arguments{
@@ -34,14 +35,18 @@ coefficient of variation (cv).}
 
 \item{working_directory}{Character. Working directory where temporary files are written.}
 
-\item{w}{Numeric or matrix. Focal window used by \code{random_raster()} to smooth the random
-error field (see \code{terra::focal()}). Default \code{3}.}
+\item{error_radius}{Integer. Radius, in cells, of the circular mean focal statistic used
+by \code{random_raster()} to smooth the random error field. Default \code{1}.}
 
 \item{flat_increment}{Numeric. Elevation increment applied to flat areas along breach
 paths, passed to \code{breach_depression()}. Default \code{0.0001}.}
 
 \item{dist}{Numeric. Maximum search distance for breach paths, in cells, passed to
 \code{breach_depression()}. Default \code{50}.}
+
+\item{focal_radius}{Integer. Radius, in cells, of the circular maximum focal statistic
+applied to the flow accumulation of each iteration, before the result layers are computed
+(e.g. \code{2} for a 15 m diameter on a 3 m DEM). Use NULL to skip it. Default \code{NULL}.}
 }
 \value{
 a spatraster with multiple layers of flow accumulation distribution

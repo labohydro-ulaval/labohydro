@@ -3,10 +3,9 @@
 #' @param raster A `SpatRaster`. Reference raster.
 #' @param error Numeric. RMSE of the random error.
 #' @param seed Integer. Random seed for reproducibility.
-#' @param w Numeric or matrix. Focal window passed to `terra::focal()`: an odd
-#'   integer (window size, e.g. `3` for a 3x3 window), a vector of two odd
-#'   integers (rows, columns), or a weights matrix. Larger windows produce a
-#'   smoother (more spatially autocorrelated) error field. Default `3`.
+#' @param radius Integer. Radius, in cells, of the circular mean focal statistic that
+#'   smooths the random field, from `circle_focal_window()`. Larger windows produce a
+#'   smoother (more spatially autocorrelated) error field. Default `1`.
 #'
 #' @returns
 #' a random raster
@@ -17,7 +16,7 @@
 random_raster <- function(raster,
                           error,
                           seed = 1,
-                          w = 3){
+                          radius = 1){
 
   # Generate a new raster with the same extent and resolution as the input DEM
   raster_random <- terra::rast(raster)  # Copy properties from DEM raster
@@ -27,7 +26,7 @@ random_raster <- function(raster,
 
   terra::mask(raster_random, raster) -> raster_random_mask
 
-  terra::focal(raster_random_mask, w = w, fun = "mean") -> raster_random_foc
+  terra::focal(raster_random_mask, w = circle_focal_window(radius), fun = "mean") -> raster_random_foc
 
   raster_random_foc/terra::global(raster_random_foc, "sd", na.rm = T)$sd -> raster_random_foc_corr
 

@@ -7,10 +7,10 @@
 circle_focal_window(radius)
 }
 \arguments{
-\item{radius}{Numeric. Radius of the circle, in number of cells.}
+\item{radius}{Integer. Radius of the circle, in cells. Must be 1 or more.}
 }
 \value{
-a matrix of circle focal window
+a matrix of circle focal window, with 1 inside the circle and NA outside
 }
 \description{
 circle_focal_window

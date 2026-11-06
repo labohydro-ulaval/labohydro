@@ -1,8 +1,8 @@
 #' Topographic position index from Weiss poster : https://www.jennessent.com/downloads/TPI-poster-TNC_18x22.pdf
 #'
 #' @param dem A `SpatRaster`. Digital elevation model.
-#' @param inner_radius Numeric. Inner radius of the annulus, in map units.
-#' @param outer_radius Numeric. Outer radius of the annulus, in map units.
+#' @param inner_radius Integer. Inner radius of the annulus, in cells.
+#' @param outer_radius Integer. Outer radius of the annulus, in cells.
 #' @param round Logical. If `TRUE`, the index is rounded to the nearest integer.
 #'
 #' @returns
@@ -16,16 +16,9 @@ weiss_topographic_position_index <- function(dem,
                                              outer_radius,
                                              round = TRUE){
 
-  # Get the resolution of the DEM (cell size in meters)
-  resolution <- terra::res(dem)[1]  # assuming square cells
-
-  # Convert radii from meters to number of cells
-  inner_size <- round((inner_radius+resolution/2) / resolution)  # inner radius in number of cells
-  outer_size <- round((outer_radius-resolution/2) / resolution)  # outer radius in number of cells
-
   # Apply focal mean with the donut-shaped window
   focal_mean <- terra::focal(dem,
-                             w = annulus_focal_window(inner_size, outer_size),
+                             w = annulus_focal_window(inner_radius, outer_radius),
                              fun = "mean",
                              na.policy = 'omit')
 

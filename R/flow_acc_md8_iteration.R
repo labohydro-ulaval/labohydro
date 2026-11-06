@@ -9,12 +9,15 @@
 #' @param dispersion_statistics Logical. If TRUE, compute the standard deviation (sd) and
 #' coefficient of variation (cv).
 #' @param working_directory Character. Working directory where temporary files are written.
-#' @param w Numeric or matrix. Focal window used by `random_raster()` to smooth the random
-#'   error field (see `terra::focal()`). Default `3`.
+#' @param error_radius Integer. Radius, in cells, of the circular mean focal statistic used
+#'   by `random_raster()` to smooth the random error field. Default `1`.
 #' @param flat_increment Numeric. Elevation increment applied to flat areas along breach
 #'   paths, passed to `breach_depression()`. Default `0.0001`.
 #' @param dist Numeric. Maximum search distance for breach paths, in cells, passed to
 #'   `breach_depression()`. Default `50`.
+#' @param focal_radius Integer. Radius, in cells, of the circular maximum focal statistic
+#'   applied to the flow accumulation of each iteration, before the result layers are computed
+#'   (e.g. `2` for a 15 m diameter on a 3 m DEM). Use NULL to skip it. Default `NULL`.
 #'
 #' @returns
 #' a spatraster with multiple layers of flow accumulation distribution
@@ -29,13 +32,18 @@ flow_acc_md8_iteration <- function(input,
                                    method = c("md8", "d8"),
                                    dispersion_statistics = TRUE,
                                    working_directory = getwd(),
-                                   w = 3,
+                                   error_radius = 1,
                                    flat_increment = 0.0001,
-                                   dist = 50){
+                                   dist = 50,
+                                   focal_radius = NULL){
 
   method <- match.arg(method)
 
   dem <- terra::rast(input)
+
+  if(!is.null(focal_radius)){
+    focal_window <- circle_focal_window(focal_radius)
+  }
 
   acc_temp <- list()
 
@@ -50,7 +58,7 @@ flow_acc_md8_iteration <- function(input,
     error_raster <- random_raster(raster = dem,
                                error = error,
                                seed = i,
-                               w = w)
+                               radius = error_radius)
 
     dem_error <- dem + error_raster
 
@@ -75,6 +83,23 @@ flow_acc_md8_iteration <- function(input,
 
     file.remove(dem_error_temp,
                 dem_breached_temp)
+
+    # Widen the flow accumulation of this iteration before the layers are computed
+    if(!is.null(focal_radius)){
+
+      acc_raw_temp <- acc_temp[[i]]
+      acc_temp[i] <- tempfile(tmpdir = working_directory, fileext = ".tif")
+
+      terra::focal(terra::rast(acc_raw_temp),
+                   w = focal_window,
+                   fun = "max",
+                   na.rm = TRUE,
+                   na.policy = "omit",
+                   filename = acc_temp[[i]])
+
+      file.remove(acc_raw_temp)
+
+    }
 
     if(any(i == n_iter)){
       cat("Write final acc raster", i, "\n")
